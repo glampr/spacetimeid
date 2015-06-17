@@ -47,4 +47,17 @@ describe "SpaceSpec" do
     expect(family.size).to eq(625+25)
   end
 
+  it "should calculate xy_box and xy_four_corners" do
+    id = SpaceTimeId.new([-131.568, 43.028])
+    expect(id.id).to eq("-131.57_43.02")
+
+    expect(id.xy_box).to eq([[-131.57, 43.02], [-131.56, 43.03]])
+    expect(id.xy_four_corners).to eq([
+      [-131.57, 43.02], [-131.56, 43.02], [-131.56, 43.03], [-131.57, 43.03]
+    ])
+    expect(id.xy_boundary).to eq([
+      [-131.57, 43.02], [-131.56, 43.02], [-131.56, 43.03], [-131.57, 43.03], [-131.57, 43.02]
+    ])
+  end
+
 end

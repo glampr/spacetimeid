@@ -251,8 +251,16 @@ class SpaceTimeId
     xy_parent.xy_children if xy?
   end
 
+  def xy_box
+    [xy, [next_x, next_y]] if xy?
+  end
+
   def xy_four_corners
-    [xy, [next_x, y], [next_x, next_y], [x, next_y], xy] if xy?
+    [xy, [next_x, y], [next_x, next_y], [x, next_y]] if xy?
+  end
+
+  def xy_boundary
+    xy_four_corners << xy if xy?
   end
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
