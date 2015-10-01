@@ -3,23 +3,22 @@ require 'time'
 describe "TimeSpec" do
 
   it "should build parent ids" do
-    time = Time.parse("2015-06-01T01:25:32Z")
+    time = Time.parse("2015-06-01T13:55:32Z")
 
     id = SpaceTimeId.new(time.to_i)
-    expect(id.ts_step).to eq(600)
-    expect(id.ts_parent.ts_step).to eq(1800)
-    expect(id.ts_parent.ts_parent.ts_step).to eq(3600)
-    expect(id.ts_parent.ts_parent.ts_parent.ts_step).to eq(3*3600)
-    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_step).to eq(6*3600)
-    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_parent.ts_step).to eq(12*3600)
-    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_parent.ts_parent.ts_step).to eq(24*3600)
+    expect(id.ts_step).to eq(3600) # 1 hour
+    expect(id.ts_parent.ts_step).to eq(2 * 3600) # 2 hours
+    expect(id.ts_parent.ts_parent.ts_step).to eq(2 * 2 * 3600) # 4 hours
+    expect(id.ts_parent.ts_parent.ts_parent.ts_step).to eq(2 * 3 * 3600) # 6 hours
+    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_step).to eq(4 * 2 * 3600) # 8 hours
+    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_parent.ts_step).to eq(5 * 2 * 3600) # 10 h
 
-    expect(id.id).to eq("1433121600")
-    expect(id.ts_parent.id).to eq("1433120400")
-    expect(id.ts_parent.ts_parent.id).to eq("1433120400")
-    expect(id.ts_parent.ts_parent.ts_parent.id).to eq("1433116800")
-    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.id).to eq("1433116800")
-    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_parent.id).to eq("1433116800")
+    expect(id.ts_id).to eq(Time.parse("2015-06-01T13:00:00Z").to_i) # 1 hour
+    expect(id.ts_parent.ts_id).to eq(Time.parse("2015-06-01T12:00:00Z").to_i) # 2 hours
+    expect(id.ts_parent.ts_parent.ts_id).to eq(Time.parse("2015-06-01T12:00:00Z").to_i) # 4 hours
+    expect(id.ts_parent.ts_parent.ts_parent.ts_id).to eq(Time.parse("2015-06-01T12:00:00Z").to_i)
+    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_id).to eq(Time.parse("2015-06-01T08:00:00Z").to_i)
+    expect(id.ts_parent.ts_parent.ts_parent.ts_parent.ts_parent.ts_id).to eq(Time.parse("2015-06-01T02:00:00Z").to_i)
   end
 
   it "should calculate neighbors" do

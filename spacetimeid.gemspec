@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'spacetimeid'
-  s.version     = '0.1.1'
+  s.version     = '0.2.0'
   s.date        = '2015-06-01'
   s.summary     = 'Unified space and time id with hierarchy in both dimensions!'
   s.description = 'Unified space and time id with hierarchy in both dimensions!'

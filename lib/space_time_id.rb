@@ -1,10 +1,12 @@
 class SpaceTimeId
+  extend InheritableAttribute
 
-  DEFAULTS = {
-    xy_base_step: 0.01, # 0.01 degrees
-    xy_expansion: 5,    # expands into a 5x5 grid recursively
-    ts_base_step: 600,  # 10 minutes
-    ts_expansion: [1, 3, 2, 3, 2], # expands 3 times each interval, then 2, then 3....
+  inheritable_attr :default_options
+  self.default_options = {
+    xy_base_step: 0.01,    # 0.01 degrees
+    xy_expansion: 5,       # expands into a 5x5 grid recursively
+    ts_base_step: 60 * 60, # 1 hour
+    ts_expansion: 2,       # expands 2 times each interval
     decimals: 2
   }
 
@@ -16,10 +18,9 @@ class SpaceTimeId
   attr_accessor :level
 
   def initialize(*args)
-    self.options = DEFAULTS.merge(args.extract_options!)
+    self.options = self.class.default_options.merge(args.extract_options!)
     self.interval = options.delete(:interval) || 0
     self.level = options.delete(:level) || 0
-    options[:ts_expansion] = Array(options[:ts_expansion])
     if args.length == 1 && args.first.is_a?(String)
       initialize(*args.first.split("_").map(&:to_f), original_options)
     elsif args.length == 1 && args.first.is_a?(Array) && args.first.length == 2
@@ -119,11 +120,7 @@ class SpaceTimeId
   end
 
   def ts_step
-    @ts_step ||= ts_step_aux(interval)
-  end
-
-  def ts_step_aux(interval)
-    ts_base_step * ts_expansion
+    interval == 0 ? ts_base_step : ts_base_step * ts_expansion * interval
   end
 
   def ts_base_step
@@ -131,15 +128,7 @@ class SpaceTimeId
   end
 
   def ts_expansion
-    ts_expansion_aux
-    options[:ts_expansion][0..interval].reduce(:*)
-  end
-
-  def ts_expansion_aux
-    if interval >= options[:ts_expansion].length
-      padd = [options[:ts_expansion].last] * (options[:ts_expansion].length - interval + 1)
-      options[:ts_expansion] += padd
-    end
+    options[:ts_expansion]
   end
 
   # # # # # # # # # # # # # T I M E   R E L A T I O N S # # # # # # # # # # # #

@@ -24,8 +24,8 @@ id.id
 # DEFAULTS = {
 #   xy_base_step: 0.01, # 0.01 degrees
 #   xy_expansion: 5,    # expands into a 5x5 grid recursively
-#   ts_base_step: 600,  # 10 minutes
-#   ts_expansion: [1, 3, 2, 3, 2], # each time interval expands this many times the previous one
+#   ts_base_step: 3600, # 1 hour
+#   ts_expansion: 2,    # each time interval expands this many times the previous one
 #   decimals: 2
 # }
 
