@@ -21,11 +21,11 @@ id = SpaceTimeId.new(time.to_i, [1.3, -3.048])
 id.id
 # => "1433116800_1.30_-3.05"
 
-# DEFAULTS = {
-#   xy_base_step: 0.01, # 0.01 degrees
-#   xy_expansion: 5,    # expands into a 5x5 grid recursively
-#   ts_base_step: 3600, # 1 hour
-#   ts_expansion: 2,    # each time interval expands this many times the previous one
+# self.default_options = {
+#   xy_base_step: 0.01,    # 0.01 degrees
+#   xy_expansion: 5,       # expands into a 5x5 grid recursively
+#   ts_steps:     [3600],  # [600, 1800, 3600, 21600, 86400] [10min, 0.5h, 1h, 6h, 1day]
+#   ts_expansion: 2,       # expands 2 times each interval
 #   decimals: 2
 # }
 

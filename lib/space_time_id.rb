@@ -5,7 +5,7 @@ class SpaceTimeId
   self.default_options = {
     xy_base_step: 0.01,    # 0.01 degrees
     xy_expansion: 5,       # expands into a 5x5 grid recursively
-    ts_base_step: 60 * 60, # 1 hour
+    ts_steps:     [3600],  # [600, 1800, 3600, 21600, 86400] [10min, 0.5h, 1h, 6h, 1day]
     ts_expansion: 2,       # expands 2 times each interval
     decimals: 2
   }
@@ -120,11 +120,16 @@ class SpaceTimeId
   end
 
   def ts_step
-    interval == 0 ? ts_base_step : ts_base_step * ts_expansion * interval
+    interval == 0 ? ts_base_step :
+      (ts_steps[interval] || ts_steps.last * ts_expansion * (interval - ts_steps.length + 1))
   end
 
   def ts_base_step
-    options[:ts_base_step]
+    Array(options[:ts_steps]).first
+  end
+
+  def ts_steps
+    Array(options[:ts_steps])
   end
 
   def ts_expansion
